@@ -2,4 +2,4 @@
 
 -----
 ### To-do: 
-* decide on a topic idea *(WIP)*#
+* decide on a topic idea *(WIP)*
