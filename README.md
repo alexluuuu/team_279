@@ -12,4 +12,5 @@ We will perform automated classification on dermoscopy images obtained from phas
 
 ### To-do: 
 * Extract texture features *(WIP)*
-* Extra color features *(WIP)*
+* Extract color features *(WIP)*
+* Do a classify *(WIP)*
