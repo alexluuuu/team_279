@@ -15,4 +15,7 @@ We will represent each image as a combination of textural features, color inform
 * Extract texture features *(WIP)*
 * Convert LBP into scale adaptive *(WIP)*
 * Determine how to pre-process hair, foreign bodies *(WIP)*
-* Extra color features *(WIP)*	
+* Extract color features *(WIP)*	
+* Do a classify *(WIP)*
+=======
+
