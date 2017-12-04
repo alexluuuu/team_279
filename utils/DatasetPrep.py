@@ -15,15 +15,11 @@ taking advantage of the sorted image_id column
 def PrepareGroundTruth(ground_truth_csv_path, images):
 
 	df = pd.read_csv(ground_truth_csv_path)
-	#print images
-	for (_, image_id, val, _) in df.itertuples():
-		print image_id
-	groundtruth = [val for (_, image_id, val, _) in df.itertuples() if image_id in images]
+
+	groundtruth = [val for (_, image_id, val, _) in df.itertuples() if image_id + '.jpg' in images]
 
 	return groundtruth
-	# data_as_mat = df.as_matrix()
-	# print data_as_mat[:, 1]
-	# return data_as_mat[:, 1]
+
 
 
 '''
