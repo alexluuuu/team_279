@@ -45,12 +45,14 @@ def ParseCommandLine(argvec):
 
 def StoreTextureFeatures(texture_features, out_dest):
     print "writing textural features to csv"
+    #np.savetxt(out_dest, texture_features, delimiter=',')
     df = pd.DataFrame(texture_features)
-    df.to_csv(out_dest)
+    df.to_csv(out_dest, header=None, index=False)
 
 def ReadTextureFeatures(text_ft_path):
-	df = pd.read_csv(text_ft_path, header=None, )
+	df = pd.read_csv(text_ft_path, header=None)
 
 	for vec in df.itertuples():
-		print vec
+		print list(vec)[1:]
+		print len(vec[1:])
     
