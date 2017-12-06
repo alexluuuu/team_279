@@ -26,20 +26,27 @@ class SALBP():
         for i in indexes:
             bars[i].set_facecolor('r')
 
-    def ComputeLBP(self, radius):
+
+    def _ReadFlattenImage(self, image_str):
+        img = plt.imread(image_str)
+        if len(img.shape) > 2:
+            print "Flattening image..."
+            img = ndimage.imread(image_str, flatten=True, mode='RGB').astype(int)
+
+        return img
+
+    def ComputeLBP(self, radius, image_str):
         
         n_points = 8*radius
+        img = self._ReadFlattenImage(image_str)
 
-        return local_binary_pattern(self.img, n_points, radius, self.METHOD)
+        return self._ConvertToCounts(local_binary_pattern(img, n_points, radius, self.METHOD).ravel())
 
     def ComputeScaleAdaptive(self, radius_bounds, image_str):
         r_low, r_up = radius_bounds
-        self.img = plt.imread(image_str)
-        if len(self.img.shape) > 2:
-            print "Flattening image..."
-            self.img = ndimage.imread(image_str, flatten=True, mode='RGB').astype(int)
-
-        temp = np.zeros(self.img.shape)
+        img = self._ReadFlattenImage(image_str)
+       
+        temp = np.zeros(img.shape)
         for r in range(r_low, r_up):
             self.lbp = self.ComputeLBP(r) #returns ndarray
             #print self.lbp
@@ -49,8 +56,13 @@ class SALBP():
             #self.VisualizeLBP(r)
 
 
-        return temp.ravel()
+        return self._ConvertToCounts(temp.ravel())
 
+    def _ConvertToCounts(self, text_vec):
+        count_vec = np.zeros(26)
+        for local_lbp in text_vec:
+            count_vec[int(local_lbp)] += 1
+        return count_vec
 
     def _hist(self, ax):
         n_bins = int(self.lbp.max() + 1)
