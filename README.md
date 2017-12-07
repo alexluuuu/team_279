@@ -13,7 +13,7 @@ As of 12/5: 72% accuracy on a random subsample of images (500+) with textural fe
 
 ## Reflections
 
-###Difficulties we've encountered
+### Difficulties we've encountered
 The images within the dataset are of different sizes and aspect ratios, making it difficult to represent per-pixel features exactly. Rather than manual or automated cropping to achieve uniform sizes, textural features are represented as a counts to generate unit 26-dimensional vectors. 
 
 The presence of hair and other foreign bodies is a significant issue in dermoscopic analysis. 
