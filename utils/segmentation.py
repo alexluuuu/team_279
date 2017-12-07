@@ -6,67 +6,7 @@ import matplotlib.pyplot as plt
 from skimage import transform
 from skimage import io
 import os
-
-### Clustering Methods
-def kmeans(features, k, num_iters=100):
-    """ Use kmeans algorithm to group features into k clusters.
-
-    K-Means algorithm can be broken down into following steps:
-        1. Randomly initialize cluster centers
-        2. Assign each point to the closest center
-        3. Compute new center of each cluster
-        4. Stop if cluster assignments did not change
-        5. Go to step 2
-
-    Args:
-        features - Array of N features vectors. Each row represents a feature
-            vector.
-        k - Number of clusters to form.
-        num_iters - Maximum number of iterations the algorithm will run.
-
-    Returns:
-        assignments - Array representing cluster assignment of each point.
-            (e.g. i-th point is assigned to cluster assignments[i])
-    """
-
-    N, D = features.shape
-
-    assert N >= k, 'Number of clusters cannot be greater than number of points'
-
-    # Randomly initalize cluster centers
-    idxs = np.random.choice(N, size=k, replace=False)
-    centers = features[idxs]
-    assignments = np.zeros(N)
-
-    for n in range(num_iters):
-        ### YOUR CODE HERE
-        #find assignments
-        new_assign = np.zeros(N)
-        for i in range(N):
-            min_dist = float('inf')
-            min_index = -1
-            for j in range(len(centers)):
-                dist = pdist([features[i],centers[j]], 'euclidean')
-                if dist < min_dist:
-                    min_dist = dist
-                    min_index = j
-            new_assign[i] = min_index
-        #check if assignments are same
-        if np.array_equal(assignments, new_assign):
-            break
-        assignments = new_assign
-        #generate new clusters
-        for i in range(len(centers)):
-            total = np.zeros(D)
-            n = 0
-            for j in range(len(assignments)):
-                if assignments[j] == i:
-                    total += features[j]
-                    n += 1
-            centers[i] = np.divide(total,n)
-        ### END YOUR CODE
-
-    return assignments
+from colors import *
 
 def kmeans_fast(features, k, num_iters=100):
     """ Use kmeans algorithm to group features into k clusters.
@@ -201,75 +141,6 @@ def hierarchical_clustering(features, k):
             counter += 1
     ###END YOUR CODE
     return assignments
-
-
-### Pixel-Level Features
-def color_features(img):
-    """ Represents a pixel by its color.
-
-    Args:
-        img - array of shape (H, W, C)
-
-    Returns:
-        features - array of (H * W, C)
-    """
-    H, W, C = img.shape
-    img = img_as_float(img)
-    features = np.zeros((H*W, C))
-
-    ### YOUR CODE HERE
-    features = img.reshape((H*W, C))
-    ### END YOUR CODE
-
-    return features
-
-def color_position_features(img):
-    """ Represents a pixel by its color and position.
-
-    Combine pixel's RGB value and xy coordinates into a feature vector.
-    i.e. for a pixel of color (r, g, b) located at position (x, y) in the
-    image. its feature vector would be (r, g, b, x, y).
-    Don't forget to normalize features.
-
-    Hints
-    - You may find np.mgrid and np.dstack useful
-    - You may use np.mean and np.std
-
-    Args:
-        img - array of shape (H, W, C)
-
-    Returns:
-        features - array of (H * W, C+2)
-    """
-    H, W, C = img.shape
-    color = img_as_float(img)
-    features = np.zeros((H*W, C+2))
-
-    ### YOUR CODE HERE
-    features = np.array([[img[i][j][0], img[i][j][1], img[i][j][2], float(i), float(j)] for i in range(H) for j in range(W)])
-    means = np.mean(features, axis = 0)
-    stdevs = np.std(features, axis = 0)
-    features = np.subtract(features, means)
-    features = np.divide(features, stdevs)
-    
-    ### END YOUR CODE
-
-    return features
-
-def my_features(img):
-    """ Implement your own features
-
-    Args:
-        img - array of shape (H, W, C)
-
-    Returns:
-        features - array of (H * W, C)
-    """
-    features = None
-    ### YOUR CODE HERE
-    pass
-    ### END YOUR CODE
-    return features
     
 
 ### Quantitative Evaluation

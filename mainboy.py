@@ -2,6 +2,7 @@ from utils.lbp import *
 from utils.DatasetPrep import *
 from utils.segmentation import *
 from utils.classifier import *
+from utils.colors import *
 import matplotlib.pyplot as plt
 import sys 
 
@@ -48,7 +49,9 @@ def GatherTextures(NoI, input_names, text_ft_path=None):
     return texture_features
 
 if __name__ == "__main__":
+    segmentation("sample_dataset/images/ISIC_0000000.jpg")
 
+    '''
     #get a dictionary of commandline arguments 
     args_dict = ParseCommandLine(sys.argv)
 
@@ -85,3 +88,4 @@ if __name__ == "__main__":
 
 
     #TODO: classifier
+    '''
