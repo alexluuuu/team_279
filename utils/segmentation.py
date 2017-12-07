@@ -6,7 +6,59 @@ import matplotlib.pyplot as plt
 from skimage import transform
 from skimage import io
 import os
-from colors import *
+
+### Pixel-Level Features
+def color_features(img):
+    """ Represents a pixel by its color.
+
+    Args:
+        img - array of shape (H, W, C)
+
+    Returns:
+        features - array of (H * W, C)
+    """
+    H, W, C = img.shape
+    img = img_as_float(img)
+    features = np.zeros((H*W, C))
+
+    ### YOUR CODE HERE
+    features = img.reshape((H*W, C))
+    ### END YOUR CODE
+
+    return features
+
+def color_position_features(img):
+    """ Represents a pixel by its color and position.
+
+    Combine pixel's RGB value and xy coordinates into a feature vector.
+    i.e. for a pixel of color (r, g, b) located at position (x, y) in the
+    image. its feature vector would be (r, g, b, x, y).
+    Don't forget to normalize features.
+
+    Hints
+    - You may find np.mgrid and np.dstack useful
+    - You may use np.mean and np.std
+
+    Args:
+        img - array of shape (H, W, C)
+
+    Returns:
+        features - array of (H * W, C+2)
+    """
+    H, W, C = img.shape
+    color = img_as_float(img)
+    features = np.zeros((H*W, C+2))
+
+    ### YOUR CODE HERE
+    features = np.array([[img[i][j][0], img[i][j][1], img[i][j][2], float(i), float(j)] for i in range(H) for j in range(W)])
+    means = np.mean(features, axis = 0)
+    stdevs = np.std(features, axis = 0)
+    features = np.subtract(features, means)
+    features = np.divide(features, stdevs)
+    
+    ### END YOUR CODE
+
+    return features
 
 def kmeans_fast(features, k, num_iters=100):
     """ Use kmeans algorithm to group features into k clusters.
@@ -289,3 +341,32 @@ def load_dataset(data_dir):
             gt_masks.append(gt_mask)
 
     return imgs, gt_masks
+
+def segmentation(image, num_segments = 2, scale = 0.1):
+
+    #yung main boy does some segmentation
+    img = plt.imread(image)
+    segment = compute_segmentation(img, num_segments, clustering_fn=kmeans_fast, feature_fn=color_features, scale=scale)
+    
+    plt.subplot(1, 2, 1)
+    plt.imshow(img)
+
+    plt.subplot(1, 2, 2)
+    plt.imshow(segment, cmap='viridis')
+
+    plt.show()
+
+#return the image, but only the parts with in the center segment
+def getCenterSegment(image, segmentation, flat = False):
+    H,W,C = image.shape
+    assert (H,W) == segmentation.shape
+    
+    center_segment = segmentation[H//2,W//2]
+    result = np.zeros(image.shape, dtype=np.uint8)
+    result.fill(255)
+    idx = (segmentation == center_segment)
+    if flat:
+        result = image[idx]
+    else:
+        result[idx] = image[idx]
+    return result
