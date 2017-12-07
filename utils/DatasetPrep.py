@@ -39,15 +39,15 @@ def ParseCommandLine(argvec):
 	return {"ground_truth": argvec[1], "imagedir": argvec[3]}
 
 
-def StoreTextureFeatures(texture_features, out_dest):
-    print "writing textural features to csv"
-    df = pd.DataFrame(texture_features)
+def StoreFeatures(features, out_dest):
+    print "writing features to csv"
+    df = pd.DataFrame(features)
     df.to_csv(out_dest, header=None, index=False)
 
 
-def ReadTextureFeatures(text_ft_path):
-	print "reading textural features from csv"
-	df = pd.read_csv(text_ft_path, header=None)
+def ReadFeatures(ft_path):
+	print "reading features from csv"
+	df = pd.read_csv(ft_path, header=None)
 
 	return df.as_matrix()
     

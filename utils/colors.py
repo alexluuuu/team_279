@@ -11,7 +11,7 @@ SATURATION = 256
 VALUE = 256
 
 #extract the counts
-def extractColorHistogram(image, colorspace = 'RGB'):
+def extractColor(image, colorspace = 'RGB'):
     image = rgb2hsv(image)
     segment = compute_segmentation(image, 3, clustering_fn=kmeans_fast, \
                                    feature_fn=color_position_features, scale=0.1)

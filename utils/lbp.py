@@ -4,6 +4,7 @@ from skimage.transform import rotate
 from skimage.feature import local_binary_pattern
 from skimage import data
 from skimage.color import label2rgb
+from sklearn.preprocessing import normalize
 
 from scipy import ndimage
 
@@ -66,13 +67,9 @@ class SALBP():
         plt.show()
 
 
-     def _overlay_labels(self, labels):
-        '''
-        Place labels on image
-        '''
-
-        mask = np.logical_or.reduce([self.lbp == each for each in labels])
-        return label2rgb(mask, image=self.img.astype(int), bg_label=0, alpha=0.5)
+     # def _overlay_labels(self, labels):
+     #    mask = np.logical_or.reduce([self.lbp == each for each in labels])
+     #    return label2rgb(mask, image=self.img.astype(int), bg_label=0, alpha=0.5)
 
     def _highlight_bars(self, bars, indexes):
         '''
@@ -96,7 +93,7 @@ class SALBP():
         count_vec = np.zeros(26)
         for local_lbp in text_vec:
             count_vec[int(local_lbp)] += 1
-        return count_vec
+        return normalize(count_vec, axis='l1')
 
     def _hist(self, ax):
         n_bins = int(self.lbp.max() + 1)
