@@ -20,8 +20,6 @@ def PrepareGroundTruth(ground_truth_csv_path, images):
 
 	return groundtruth
 
-
-
 '''
 
 '''
@@ -35,24 +33,21 @@ def GatherImageSet(imagedir):
 def ParseCommandLine(argvec):
 	'''
 	Ideal usage: 
-
 	$python mainboy.py ground_truth metadata imagedir 
 	'''
-	#if len(argvec) 
 
 	return {"ground_truth": argvec[1], "imagedir": argvec[3]}
 
 
 def StoreTextureFeatures(texture_features, out_dest):
     print "writing textural features to csv"
-    #np.savetxt(out_dest, texture_features, delimiter=',')
     df = pd.DataFrame(texture_features)
     df.to_csv(out_dest, header=None, index=False)
 
+
 def ReadTextureFeatures(text_ft_path):
+	print "reading textural features from csv"
 	df = pd.read_csv(text_ft_path, header=None)
 
-	for vec in df.itertuples():
-		print list(vec)[1:]
-		print len(vec[1:])
+	return df.as_matrix()
     
