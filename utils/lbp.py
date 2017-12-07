@@ -9,68 +9,29 @@ from scipy import ndimage
 
 
 class SALBP():
+    '''
+    Class which encapsulates computation of local binary patterns and visualization of LBP. 
+    '''
 
     def __init__(self):
-        #self.radius = 3
-        #self.n_points = 8*self.radius
+        
         self.METHOD = 'uniform'
         self.lbp = None
-        #self.img = None
 
-    def _overlay_labels(self, labels):
-
-        mask = np.logical_or.reduce([self.lbp == each for each in labels])
-        return label2rgb(mask, image=self.img.astype(int), bg_label=0, alpha=0.5)
-
-    def _highlight_bars(self, bars, indexes):
-        for i in indexes:
-            bars[i].set_facecolor('r')
-
-
-    def _ReadFlattenImage(self, image_str):
-        img = plt.imread(image_str)
-        if len(img.shape) > 2:
-            print "Flattening image..."
-            img = ndimage.imread(image_str, flatten=True, mode='RGB').astype(int)
-
-        return img
-
+    
     def ComputeLBP(self, radius, image_str):
         
         n_points = 8*radius
         img = self._ReadFlattenImage(image_str)
+        self.lbp = local_binary_pattern(img, n_points, radius, self.METHOD)
 
-        return self._ConvertToCounts(local_binary_pattern(img, n_points, radius, self.METHOD).ravel())
-
-    def ComputeScaleAdaptive(self, radius_bounds, image_str):
-        r_low, r_up = radius_bounds
-        img = self._ReadFlattenImage(image_str)
-       
-        temp = np.zeros(img.shape)
-        for r in range(r_low, r_up):
-            self.lbp = self.ComputeLBP(r) #returns ndarray
-            #print self.lbp
-            #print temp
-            temp = np.maximum(temp, self.lbp)
-            #self.lbp = temp
-            #self.VisualizeLBP(r)
-
-
-        return self._ConvertToCounts(temp.ravel())
-
-    def _ConvertToCounts(self, text_vec):
-        count_vec = np.zeros(26)
-        for local_lbp in text_vec:
-            count_vec[int(local_lbp)] += 1
-        return count_vec
-
-    def _hist(self, ax):
-        n_bins = int(self.lbp.max() + 1)
-        return ax.hist(self.lbp.ravel(), normed = True, bins=n_bins, range=(0, n_bins), 
-            facecolor='0.5')
-
+        return self._ConvertToCounts(self.lbp.ravel())
 
     def VisualizeLBP(self, radius):
+
+        '''
+        Visualize the local binary patterns as overlays on the image 
+        '''
         n_points = 8*radius
         fig, (ax_img, ax_hist) = plt.subplots(nrows=2, ncols=3, figsize=(9, 6))
         plt.gray()
@@ -103,6 +64,47 @@ class SALBP():
             ax.axis('off')
 
         plt.show()
+
+
+     def _overlay_labels(self, labels):
+        '''
+        Place labels on image
+        '''
+
+        mask = np.logical_or.reduce([self.lbp == each for each in labels])
+        return label2rgb(mask, image=self.img.astype(int), bg_label=0, alpha=0.5)
+
+    def _highlight_bars(self, bars, indexes):
+        '''
+        Change some colors in the bar graph histogram 
+        '''
+        for i in indexes:
+            bars[i].set_facecolor('r')
+
+    def _ReadFlattenImage(self, image_str):
+        '''
+        Read in the image and flatten to 2 dimensions if necessary
+        '''
+        img = plt.imread(image_str)
+        if len(img.shape) > 2:
+            print "Flattening image..."
+            img = ndimage.imread(image_str, flatten=True, mode='RGB').astype(int)
+
+        return img
+
+    def _ConvertToCounts(self, text_vec):
+        count_vec = np.zeros(26)
+        for local_lbp in text_vec:
+            count_vec[int(local_lbp)] += 1
+        return count_vec
+
+    def _hist(self, ax):
+        n_bins = int(self.lbp.max() + 1)
+        return ax.hist(self.lbp.ravel(), normed = True, bins=n_bins, range=(0, n_bins), 
+            facecolor='0.5')
+
+
+
 
 
 
