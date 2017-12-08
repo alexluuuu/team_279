@@ -4,9 +4,11 @@ from sklearn.svm import SVC
 from sklearn.model_selection import cross_val_score, cross_val_predict
 from sklearn.model_selection import LeaveOneOut
 from sklearn.metrics import confusion_matrix
+from sklearn.model_selection import StratifiedShuffleSplit
+from sklearn.model_selection import GridSearchCV
 import numpy as np
 
-def RunClassifer(X, Y):
+def RunClassifier(X, Y):
 
 	svm_man = SVC()
 	scores = cross_val_score(svm_man, X, Y, cv=LeaveOneOut(), scoring='accuracy')
@@ -17,12 +19,12 @@ def RunClassifer(X, Y):
 
 def TuneClassifier(X, Y):
 
-	C_range = np.logspace(-2, 10, 13)
-	gamma_range = np.logspace(-9, 3, 13)
+	C_range = np.logspace(-2, 6, 9)
+	gamma_range = np.logspace(-4, 4, 9)
 	param_grid = dict(gamma=gamma_range, C=C_range)
 	cv = StratifiedShuffleSplit(n_splits=5, test_size=0.2, random_state=42)
 	grid = GridSearchCV(SVC(), param_grid=param_grid, cv=cv)
-	grid.fit(X, y)
+	grid.fit(X, Y)
 
 	print("The best parameters are %s with a score of %0.2f"
 	      % (grid.best_params_, grid.best_score_))

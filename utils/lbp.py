@@ -5,9 +5,21 @@ from skimage.feature import local_binary_pattern
 from skimage import data
 from skimage.color import label2rgb
 from sklearn.preprocessing import normalize
+from image_ops import *
 
 from scipy import ndimage
 
+
+def ComputeLBP(image, radius):
+    n_points = 8*radius
+    lbp = local_binary_pattern( Flatten(image), n_points, radius, 'uniform')
+    return ConvertToCounts(lbp.ravel())
+
+def ConvertToCounts(vec):
+    count_vec = np.zeros(26)
+    for local_lbp in vec:
+        count_vec[int(local_lbp)] += 1
+    return count_vec
 
 class SALBP():
     '''
@@ -24,6 +36,7 @@ class SALBP():
         
         n_points = 8*radius
         img = self._ReadFlattenImage(image_str)
+        img = DynamicRescale(img)
         self.lbp = local_binary_pattern(img, n_points, radius, self.METHOD)
 
         return self._ConvertToCounts(self.lbp.ravel())
@@ -84,16 +97,17 @@ class SALBP():
         '''
         img = plt.imread(image_str)
         if len(img.shape) > 2:
-            print "Flattening image..."
+            #print "Flattening image..."
             img = ndimage.imread(image_str, flatten=True, mode='RGB').astype(int)
 
         return img
+
 
     def _ConvertToCounts(self, text_vec):
         count_vec = np.zeros(26)
         for local_lbp in text_vec:
             count_vec[int(local_lbp)] += 1
-        return normalize(count_vec, axis='l1')
+        return count_vec
 
     def _hist(self, ax):
         n_bins = int(self.lbp.max() + 1)

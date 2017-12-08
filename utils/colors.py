@@ -5,7 +5,7 @@ EXTRACTION OF COLOR-RELATED FEATURES
 import numpy as np
 from segmentation import *
 from skimage.color import rgb2hsv
-
+from image_ops import * 
 HUE = 180
 SATURATION = 256
 VALUE = 256
@@ -14,7 +14,7 @@ VALUE = 256
 def extractColor(image, colorspace = 'RGB'):
     image = rgb2hsv(image)
     segment = compute_segmentation(image, 3, clustering_fn=kmeans_fast, \
-                                   feature_fn=color_position_features, scale=0.1)
+                                   feature_fn=color_position_features, scale=0.4)
     center = getCenterSegment(image, segment, flat = True)
     counts = np.zeros((16, 4, 4))
     for i in center:
@@ -28,3 +28,4 @@ def extractColor(image, colorspace = 'RGB'):
         counts[tuple(idx)] += 1
     counts = counts/len(center)
     return np.ravel(counts)
+
