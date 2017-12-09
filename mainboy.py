@@ -30,7 +30,7 @@ def GatherFeatures(NoI, input_names, imagedir, output_dest_text, output_dest_col
         texture_features = normalize(texture_features, 'l1')
 
         StoreFeatures(texture_features, output_dest_text)
-        StoreFeatures(texture_features, output_dest_color)
+        StoreFeatures(color_features, output_dest_color)
 
     
     return (texture_features, color_features)
@@ -64,9 +64,34 @@ if __name__ == "__main__":
 
     combined_features = np.concatenate((texture_features, color_features), axis=1)
 
-    StoreFeatures(combined_features, combined.txt)
-    #RunClassifier(texture_features, groundtruth )
-    TuneClassifier(texture_features, groundtruth)
+    #StoreFeatures(combined_features, "combined.txt")
+    #StoreFeatures(groundtruth, "groundtruth.txt")
+
+    print "preparing to run classifier"
+    print '---------------------------'
+    
+    
+    C = .5
+    C_bound = 10
+    W_bound = 10
+    grid = np.zeros((C_bound, W_bound, 3))
+    for i in range(C_bound):
+        weight = 1.5
+        for j in range(W_bound):
+            print 'for C', C
+            print 'for weight', weight
+            grid[i,j] = RunClassifier(combined_features, groundtruth, C, weight)
+            grid[i,j] = '1'
+            weight += .25
+            print '---------------------------'
+        C += .5
+    print grid
+
+    #RunClassifier(combined_features, groundtruth)
+
+    print 'total number of melanomas in set: ', sum(groundtruth)
+    #print "preparing to tune classifier"
+   # TuneClassifier(combined_features, groundtruth)
     #TODO: do colors (RGB -> HSV) 
 
     #TODO: do shape

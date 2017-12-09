@@ -13,6 +13,8 @@
 
 import numpy as Math
 import pylab as Plot
+import seaborn as sns
+from utils.DatasetPrep import *
 
 def Hbeta(D = Math.array([]), beta = 1.0):
 	"""Compute the perplexity and the P-row for a specific value of the precision of a Gaussian distribution."""
@@ -93,7 +95,7 @@ def pca(X = Math.array([]), no_dims = 50):
 	return Y;
 
 
-def tsne(X = Math.array([]), no_dims = 2, initial_dims = 50, perplexity = 30.0):
+def tsne(X = Math.array([]), no_dims = 2, initial_dims = 282, perplexity = 30.0):
 	"""Runs t-SNE on the dataset in the NxD array X to reduce its dimensionality to no_dims dimensions.
 	The syntaxis of the function is Y = tsne.tsne(X, no_dims, perplexity), where X is an NxD NumPy array."""
 
@@ -167,8 +169,13 @@ def tsne(X = Math.array([]), no_dims = 2, initial_dims = 50, perplexity = 30.0):
 if __name__ == "__main__":
 	print "Run Y = tsne.tsne(X, no_dims, perplexity) to perform t-SNE on your dataset."
 	print "Running example on 2,500 MNIST digits..."
-	X = Math.loadtxt("mnist2500_X.txt");
-	labels = Math.loadtxt("mnist2500_labels.txt");
-	Y = tsne(X, 2, 50, 20.0);
+	combined_features = Math.loadtxt("combined.txt", delimiter=',')
+	print combined_features.shape
+	labels = Math.loadtxt("groundtruth.txt");
+	Y = tsne(combined_features, 2, 282, 20.0);
 	Plot.scatter(Y[:,0], Y[:,1], 20, labels);
+	# with sns.axes_style("white"):
+	#     sns.jointplot(x=Y[:,0], y=Y[:,1], kind="hex", color="k");
 	Plot.show();
+
+	StoreFeatures(Y, "dim_reduc.csv")
