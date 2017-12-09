@@ -27,17 +27,23 @@ pandas
 seaborn
 ```
 
-The main can be run with the usage: `python mainboy.py <path to ground truth> <path to metadata> <path to image set> `
+The main can be run with the usage: 
+```bash
+python mainboy.py <path to ground truth> <path to metadata> <path to image set> 
+```
 
 From scratch, the feature extraction takes about 2 hours on my machine; intermediate features from all 2000 images have been stored in folder `intermediates`, and can be moved to the top level if desired. If this is done, features will be read from file and the SVM will be tuned.  
 
 We also have an implementation of a not-really-well-trained convolutional neural net. For this, in addition to the above, you need `keras`. 
 
-The cnn can be run assigning path variables `image_dir` and `truth_file` in `convnet.py` before calling `python convent.py`. 
+The cnn can be run assigning path variables `image_dir` and `truth_file` in `convnet.py` before calling 
+```bash
+python convent.py
+``` 
 
 ### Visualizations 
 
-These are performed within the Data Visualizations iPython notebook. See the Visualizations folder for results. 
+These are performed within the Data Visualizations iPython notebook. See the `Visualizations` folder for results. 
 
 ## Performance 
 As of 12/8: 81.3% accuracy on a random subsample of images (500+) with texture and color features, using linear kernel with class_weight={1:3.5} and and C = 3.0 (?) 
