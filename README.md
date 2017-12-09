@@ -28,7 +28,7 @@ The presence of hair and other foreign bodies is a significant issue in dermosco
 ![scope shadow](visualizations/shadow.jpg)
 ![foreign object](visualizations/foreign.jpg)
 
-We have chosen to include these images regardless and see how well our classifier performs -- * update as of 12/8/2017, 9:21PM *: did not do well LOL. 
+We have chosen to include these images regardless and see how well our classifier performs -- *update as of 12/8/2017, 9:21PM* : did not do well LOL. 
 
 We did the same feature -> count conversion for color features. The final result is an incredibly sparse series of vectors which have very little variance -- this makes it really difficult to do the machine learning, unfortunately. See: 
 ![feature_dist_1](visualizations/color_mel.png)
