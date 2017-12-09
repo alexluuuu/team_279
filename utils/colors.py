@@ -1,6 +1,12 @@
-'''
-EXTRACTION OF COLOR-RELATED FEATURES
-'''
+# 
+# colors.py
+# 
+# Extraction of color features from an image.
+# 
+# 
+# 
+# 
+# 
 
 import numpy as np
 from segmentation import *

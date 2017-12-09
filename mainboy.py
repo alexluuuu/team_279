@@ -72,16 +72,15 @@ if __name__ == "__main__":
     
     
     C = .5
-    C_bound = 10
-    W_bound = 10
+    C_bound = 8
+    W_bound = 8
     grid = np.zeros((C_bound, W_bound, 3))
     for i in range(C_bound):
         weight = 1.5
         for j in range(W_bound):
             print 'for C', C
             print 'for weight', weight
-            grid[i,j] = RunClassifier(combined_features, groundtruth, C, weight)
-            grid[i,j] = '1'
+            grid[i,j] = EvaluateClassifier(combined_features, groundtruth, C, weight)
             weight += .25
             print '---------------------------'
         C += .5
