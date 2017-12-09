@@ -1,3 +1,11 @@
+#  
+# segmentation.py
+# 
+# Includes the magic that we need to segment the images and extract pixel-level color features
+# from the segment containing the ROI. 
+# 
+# 
+
 import numpy as np
 import random
 from scipy.spatial.distance import squareform, pdist, cdist

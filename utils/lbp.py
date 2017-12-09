@@ -6,7 +6,6 @@
 # a LBP matrix into a vector of counts. 
 # 
 # 
-# 
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -21,16 +20,31 @@ from scipy import ndimage
 
 
 def ComputeLBP(image, radius):
+    '''
+    Computation of local binary pattern of an image. 
+    Input
+        * image as np.ndarray
+        * radius, an int 
+    Output:
+        * A 26-long vector: count of lbp values that appear in the image
+    '''
     n_points = 8*radius
     lbp = local_binary_pattern( Flatten(image), n_points, radius, 'uniform')
     return ConvertToCounts(lbp.ravel())
 
-def ConvertToCounts(vec):
-    count_vec = np.zeros(26)
+def ConvertToCounts(vec, dim=26):
+    '''
+    Converting a matrix to counts of the values that are obtained
+    '''
+    count_vec = np.zeros(dim)
     for local_lbp in vec:
         count_vec[int(local_lbp)] += 1
     return count_vec
-
+# 
+# The following code is heavily adapted from the skimage lbp visualization example which
+# is described here: 
+# http://scikit-image.org/docs/dev/auto_examples/features_detection/plot_local_binary_pattern.html
+# 
 def VisualizeLBP(radius=3, ):
 
     '''
@@ -70,7 +84,7 @@ def VisualizeLBP(radius=3, ):
     plt.show()
 
 
- def overlay_labels(img, lbp, labels):
+def overlay_labels(img, lbp, labels):
     mask = np.logical_or.reduce([lbp == each for each in labels])
     return label2rgb(mask, image=img.astype(int), bg_label=0, alpha=0.5)
 

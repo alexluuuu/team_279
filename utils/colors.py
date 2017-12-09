@@ -3,15 +3,14 @@
 # 
 # Extraction of color features from an image.
 # 
-# 
-# 
-# 
-# 
+#
 
 import numpy as np
 from segmentation import *
 from skimage.color import rgb2hsv
 from image_ops import * 
+
+#Define global vars :/ 
 HUE = 180
 SATURATION = 256
 VALUE = 256

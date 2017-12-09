@@ -1,7 +1,7 @@
 #
 # classifier.py
 # 
-# Wrapper functions that employ sklearn's support vector classifier and cross validation tools
+# Wrapper function that employs sklearn's support vector classifier and cross validation tools
 # to train and evaluate a support vector classifier on the given data. 
 #
 
@@ -13,6 +13,30 @@ from sklearn.model_selection import StratifiedShuffleSplit
 import numpy as np
 import matplotlib.pyplot as plt
 
+def Tuner(combined_features, groundtruth):
+    '''
+    Input: 
+        * all features
+        * ground truth labels
+
+    Output:
+        * tuning grid of (accuracy, sensitivity, specificity) for specified bounds on C, class_weight
+
+    '''
+    C = .5
+    C_bound = 8
+    W_bound = 8
+    grid = np.zeros((C_bound, W_bound, 3))
+    for i in range(C_bound):
+        weight = 1.5
+        for j in range(W_bound):
+            print 'for C', C
+            print 'for weight', weight
+            grid[i,j] = EvaluateClassifier(combined_features, groundtruth, C, weight)
+            weight += .25
+            print '---------------------------'
+        C += .5
+    return grid
 
 def EvaluateClassifier(X, Y, C, weight):
 	'''
@@ -45,20 +69,4 @@ def EvaluateClassifier(X, Y, C, weight):
 
 	return (acc, sens, spec)
 
-
-def VisualizeTuning(grid, X_bounds, Y_bounds):
-
-    (X_low, X_high, X_step) = X_bounds
-    Y_low, Y_high, Y_step = Y_bounds
-
-    plt.figure(figsize=(8, 6))
-    plt.subplots_adjust(left=.2, right=0.95, bottom=0.15, top=0.95)
-    plt.imshow(grid, interpolation='nearest', cmap=plt.cm.hot)
-    plt.xlabel('Melanoma Class Weight')
-    plt.ylabel('C')
-    plt.colorbar()
-    plt.xticks(np.arange(8), np.arange(X_low, X_high, X_step))
-    plt.yticks(np.arange(8), np.arange(Y_low, Y_high, Y_step))
-    plt.title('10-fold CV Accuracy')
-    plt.show()
 
