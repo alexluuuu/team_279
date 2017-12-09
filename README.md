@@ -38,7 +38,7 @@ We also have an implementation of a not-really-well-trained convolutional neural
 
 The cnn can be run assigning path variables `image_dir` and `truth_file` in `convnet.py` before calling 
 ```bash
-python convent.py
+python convnet.py
 ``` 
 
 ### Visualizations 
